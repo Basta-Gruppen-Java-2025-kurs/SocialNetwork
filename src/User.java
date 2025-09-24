@@ -2,6 +2,19 @@ import Helpers.Menu;
 import Helpers.Named;
 
 public abstract class User implements Menu, Named {
+
+    public enum UserRoles {
+        REGULAR(User.class),
+        MODERATOR(Moderator.class),
+        ADMIN(User.class);
+
+        final Class<? extends User> userClass;
+
+        UserRoles(Class<? extends User> userClass) {
+            this.userClass = userClass;
+        }
+    }
+
     String name;
     String nickname;
     String email;
