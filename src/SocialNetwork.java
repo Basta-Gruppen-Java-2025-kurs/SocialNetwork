@@ -42,7 +42,7 @@ public class SocialNetwork implements Menu {
             listMenuLoop("Select user's role:", "Cancel", "No user roles found.", Arrays.asList(User.UserRoles.values()),
                     role -> {
                         try {
-                            Constructor<? extends User> cons = role.userClass.getConstructor(String.class, String.class);
+                            Constructor<? extends User> cons = role.userClass.asSubclass(User.class).getConstructor(String.class, String.class);
                             User newUser = cons.newInstance(userName, userEmail);
                             System.out.println(users.add(newUser) ? "User added." : "Failed to add user.");
                         } catch (Exception e) {

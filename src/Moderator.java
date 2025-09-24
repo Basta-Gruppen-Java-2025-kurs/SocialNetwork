@@ -1,6 +1,6 @@
 public class Moderator extends User implements Reportable
 {
-    Moderator(String name, String email)
+    public Moderator(String name, String email)
     {
         super(name, email);
     }
