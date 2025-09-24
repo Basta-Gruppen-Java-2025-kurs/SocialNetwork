@@ -1,4 +1,4 @@
-public class Moderator extends User implements Reportable
+public class Moderator extends User
 {
     public Moderator(String name, String email)
     {
@@ -18,9 +18,4 @@ public class Moderator extends User implements Reportable
 
     }
 
-    @Override
-    public void ReportMessage()
-    {
-
-    }
 }
