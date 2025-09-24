@@ -1,4 +1,5 @@
 import Helpers.Menu;
+import Helpers.MenuHelper;
 
 import java.util.ArrayList;
 
@@ -18,6 +19,22 @@ public class SocialNetwork implements Menu {
 
     @Override
     public void menu() {
+        MenuHelper.menuLoop("Social Network\n\nNext action:",
+                new String[] {"Exit", "See feed", "List users", "Log in as user"},
+                new Runnable[] {this::seeFeed, this::listUsers, this::logIn},
+                false);
+        System.out.println("Goodbye.");
+    }
+
+    private void seeFeed() {
+
+    }
+
+    private void listUsers() {
+
+    }
+
+    private void logIn() {
 
     }
 }
