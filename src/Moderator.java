@@ -1,4 +1,4 @@
-public class Moderator extends User
+public class Moderator extends User implements Reportable
 {
     Moderator(String name, String email)
     {
@@ -10,5 +10,17 @@ public class Moderator extends User
     {
         System.out.println(this.name + ": " + message);
         return new Post(message, destination);
+    }
+
+    @Override
+    public void menu()
+    {
+
+    }
+
+    @Override
+    public void ReportMessage()
+    {
+
     }
 }
