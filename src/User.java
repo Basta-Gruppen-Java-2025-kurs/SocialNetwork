@@ -3,7 +3,7 @@ import Helpers.Named;
 
 public abstract class User implements Menu, Named {
 
-    public enum UserRoles {
+    public enum UserRoles implements Named {
         REGULAR(User.class),
         MODERATOR(Moderator.class),
         ADMIN(User.class);
@@ -13,13 +13,18 @@ public abstract class User implements Menu, Named {
         UserRoles(Class<? extends User> userClass) {
             this.userClass = userClass;
         }
+
+        @Override
+        public String getName() {
+            return this.toString();
+        }
     }
 
     String name;
     String nickname;
     String email;
     public abstract Post postMessage(String message, String destination);
-    User(String name, String email) {
+    public User(String name, String email) {
         this.name = name;
         this.email = email;
     }
