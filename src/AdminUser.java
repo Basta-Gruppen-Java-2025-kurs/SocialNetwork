@@ -8,13 +8,16 @@ public class AdminUser extends User {
     public Post postMessage(String message, String destination) {
         Post newPost = new Post();
 
+        //need addPost method in SocialNetwork
+       // SocialNetwork.getInstance().addPost(newPost);
         System.out.println("Admin " + name + " posted to " + destination + ": " + message);
 
         return newPost;
     }
 
     public void deletePost(Post post) {
-        //lägg till logic för att ta bort från en lista
+        //need removePost in SocialNetwork
+        //SocialNetwork.getInstance().removePost(post);
 
         System.out.println("Admin" + name + " deleted post: " + post);
     }
