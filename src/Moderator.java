@@ -7,7 +7,6 @@ public class Moderator extends User
 
     @Override
     public void postMessage(String message, String destination) {
-
         System.out.println(this.name + ": " + message);
     }
 }
