@@ -2,6 +2,9 @@ import Helpers.Menu;
 import Helpers.Named;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import static Helpers.MenuHelper.menuLoop;
 
 public class Post implements Likeable, Named, Menu, Reportable {
     ArrayList<User> likes = new ArrayList<>();
@@ -42,9 +45,59 @@ public class Post implements Likeable, Named, Menu, Reportable {
         return name.toString();
     }
 
+    record MenuThings(String [] options, Runnable[] actions) {}
+    private MenuThings menuThings() {
+        ArrayList<Runnable> actions = new ArrayList<>(Arrays.asList(()-> System.out.println(this),this::edit));
+        ArrayList<String> options = new ArrayList<>(Arrays.asList("Back", "Show", "Edit"));
+        if (likes.contains(SocialNetwork.getInstance().getCurrentUser())) {
+            options.add("Unlike");
+            actions.add(this::unlike);
+        } else {
+            options.add("Like");
+            actions.add(this::like);
+        }
+        options.add("Who liked?");
+        if (reports.contains(SocialNetwork.getInstance().getCurrentUser())) {
+            options.add("Unreport");
+            actions.add(this::unReportMessage);
+        } else {
+            options.add("Report");
+            actions.add(this::reportMessage);
+        }
+        options.add("Who reported?");
+        actions.add(this::listReports);
+        return new MenuThings(options.toArray(new String[0]), actions.toArray(new Runnable[0]));
+    }
+
+    private void listReports() {
+        if (reports.isEmpty()) {
+            System.out.println("Not reported by anyone.");
+        } else {
+            System.out.println("Reported by: " + String.join(", ", reports.stream().map(u -> u.name).toList()));
+        }
+    }
+
+    private void like() {
+        User user = SocialNetwork.getInstance().getCurrentUser();
+        if (user != null && !this.likes.contains(user)) {
+            this.likes.add(user);
+            System.out.println("Post liked.");
+        } else {
+            System.out.println("Cannot like this post.");
+        }
+    }
+
+    private void unlike() {
+        System.out.println(likes.remove(SocialNetwork.getInstance().getCurrentUser()) ? "Post liked." : "Failed to like.");
+    }
+
     @Override
     public void menu() {
-        // show, edit, delete, report, unreport, like, unlike, who liked, who reported
+        MenuThings things = menuThings();
+        menuLoop("Select action:", things.options, things.actions, false);
+    }
+
+    public void edit() {
 
     }
 
@@ -61,7 +114,8 @@ public class Post implements Likeable, Named, Menu, Reportable {
     }
 
     @Override
-    public void reportMessage(User byWhom) {
+    public void reportMessage() {
+        User byWhom = SocialNetwork.getInstance().getCurrentUser();
         reported = true;
         if (!reports.contains(byWhom)) {
             reports.add(byWhom);
@@ -69,7 +123,8 @@ public class Post implements Likeable, Named, Menu, Reportable {
     }
 
     @Override
-    public boolean unReportMessage(User byWhom) {
+    public boolean unReportMessage() {
+        User byWhom = SocialNetwork.getInstance().getCurrentUser();
         boolean result = false;
         if (reports.contains(byWhom))  {
             result = reports.remove(byWhom);

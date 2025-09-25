@@ -38,7 +38,7 @@ public class SocialNetwork implements Menu {
         if (loggedInAs == null) {
             return new String[]{"Exit ❌", "See feed", "List users", "Log in as user", "Add new user"};
         } else {
-            return new String[]{"Exit ❌", "See feed", "List users", "User menu", "Log out", "Add new user"};
+            return new String[]{"Exit ❌", "See feed", "List users", "User menu", "Handle posts", "Log out", "Add new user"};
         }
     }
 
@@ -46,7 +46,7 @@ public class SocialNetwork implements Menu {
         if (loggedInAs == null) {
             return new Runnable[]{this::seeFeed, this::listUsers, this::logIn, this::addNewUser};
         } else {
-            return new Runnable[]{this::seeFeed, this::listUsers, loggedInAs::menu, this::logOut, this::addNewUser};
+            return new Runnable[]{this::seeFeed, this::listUsers, loggedInAs::menu, this::handlePosts, this::logOut, this::addNewUser};
         }
     }
     @Override
@@ -131,4 +131,20 @@ public class SocialNetwork implements Menu {
             user.menu();
         }, true);
     }
+
+
+    private void handlePosts() {
+        if (loggedInAs == null) {
+            System.out.println("Not logged in.");
+            return;
+        }
+        ArrayList<Post> postList = switch (loggedInAs) {
+            case RegularUser user -> posts.stream().filter(p -> p.postedBy == user).toList();
+            case Moderator ignored -> posts;
+            case AdminUser ignored -> posts;
+        };
+
+        listMenuLoop("Select post:", "Back", "No posts found.", postList, Post::menu, false);
+    }
+
 }

@@ -1,6 +1,6 @@
 public interface Reportable
 {
-    abstract void reportMessage(User byWhom);
-    abstract boolean unReportMessage(User byWhom);
+    abstract void reportMessage();
+    abstract boolean unReportMessage();
     abstract boolean isReported();
 }
