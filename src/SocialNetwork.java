@@ -23,6 +23,10 @@ public class SocialNetwork implements Menu {
         return instance;
     }
 
+    public ArrayList<Post> getPosts() {
+        return posts;
+    }
+
     @Override
     public void menu() {
         menuLoop("Social Network\n\nNext action:",
