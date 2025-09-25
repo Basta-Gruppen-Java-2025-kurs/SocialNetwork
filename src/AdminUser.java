@@ -1,3 +1,7 @@
+import Helpers.SafeInput;
+
+import java.util.Scanner;
+
 public class AdminUser extends User {
 
     public AdminUser(String name, String email) {
@@ -21,13 +25,18 @@ public class AdminUser extends User {
 
     @Override
     public void menu() {
-        String[] options = {"Exit", "Post a message", "Delete post"};
+        String[] options = {"Exit ❌", "Post a message", "Delete post"};
         Runnable[] actions = {
-                () -> postMessage("Hello from AdminUser menu!", "My Wall"),
+                () -> {
+                    SafeInput si = new SafeInput(new Scanner(System.in));
+                    String message = si.nextLine("Enter your message: ");
+                    String destination = si.nextLine("Enter destination: ");
+                    postMessage(message, destination);
+                },
                 () -> {
                     Helpers.MenuHelper.listMenuLoop(
-                            "Select a post to delete:",
-                            "Cancel",
+                            "\n--- Select a post to delete \uD83D\uDDD1\uFE0F ---",
+                            "Cancel ❌",
                             "No posts available",
                             SocialNetwork.getInstance().getPosts(),
                             (Post post) -> {
@@ -37,7 +46,7 @@ public class AdminUser extends User {
                     );
                 }
         };
-        String header = name + "'s Menu";
+        String header = "\n--- " + name + "'s Admin Menu ---";
         Helpers.MenuHelper.menuLoop(header, options, actions, false);
     }
 

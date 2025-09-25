@@ -1,3 +1,7 @@
+import Helpers.SafeInput;
+
+import java.util.Scanner;
+
 public class RegularUser extends User {
 
     public RegularUser(String name, String email) {
@@ -15,12 +19,18 @@ public class RegularUser extends User {
 
     @Override
     public void menu() {
-        String[] options = {"Exit", "Post a message"};
+
+        String[] options = {"Exit ❌", "Post a message"};
         Runnable[] actions = {
-                () -> postMessage("Hello from RegularUser menu!", "My Wall")
+                () -> {
+                    SafeInput si = new SafeInput(new Scanner(System.in));
+                    String message = si.nextLine("Enter your message: ");
+                    String destination = si.nextLine("Enter destination: ");
+                    postMessage(message, destination);
+                }
         };
 
-        String header = name + "'s Menu";
+        String header = "\n--- " + name + "'s Menu ---";
         Helpers.MenuHelper.menuLoop(header, options, actions, false);
     }
 

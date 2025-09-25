@@ -27,10 +27,14 @@ public class SocialNetwork implements Menu {
         return posts;
     }
 
+
     @Override
     public void menu() {
-        menuLoop("Social Network\n\nNext action:",
-                new String[] {"Exit", "See feed", "List users", "Log in as user", "Add new user"},
+        System.out.println("\n╔═════════════════════════════════╗");
+        System.out.println("🌐 WELCOME TO THE SOCIAL NETWORK 🌐");
+        System.out.println("╚═════════════════════════════════╝");
+        menuLoop("\n--- Social Network Menu ---\nSelect an action:",
+                new String[] {"Exit ❌", "See feed", "List users", "Log in as user", "Add new user"},
                 new Runnable[] {this::seeFeed, this::listUsers, this::logIn, this::addNewUser},
                 false);
         System.out.println("Goodbye.");
