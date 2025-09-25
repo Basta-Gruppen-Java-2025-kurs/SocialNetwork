@@ -4,19 +4,21 @@ import Helpers.Named;
 public abstract class User implements Menu, Named {
 
     public enum UserRoles implements Named {
-        REGULAR(RegularUser.class),
-        MODERATOR(Moderator.class),
-        ADMIN(AdminUser.class);
+        REGULAR(RegularUser.class, "Regular user"),
+        MODERATOR(Moderator.class, "Moderator"),
+        ADMIN(AdminUser.class, "Administrator");
 
         final Class<? extends User> userClass;
+        private final String className;
 
-        UserRoles(Class<? extends User> userClass) {
+        UserRoles(Class<? extends User> userClass, String className) {
             this.userClass = userClass;
+            this.className = className;
         }
 
         @Override
         public String getName() {
-            return this.toString();
+            return this.className;
         }
     }
 

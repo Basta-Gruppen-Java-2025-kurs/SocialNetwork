@@ -10,11 +10,10 @@ import static Helpers.MenuHelper.*;
 
 public class SocialNetwork implements Menu {
     private static SocialNetwork instance;
-
     public final ArrayList<Post> posts = new ArrayList<>();
     public final ArrayList<User> users = new ArrayList<>();
+    private User loggedInAs = null;
     private SocialNetwork() {
-
     }
     public static SocialNetwork getInstance() {
         if (instance == null) {
@@ -27,17 +26,57 @@ public class SocialNetwork implements Menu {
         return posts;
     }
 
+    public User getCurrentUser() {
+        return loggedInAs;
+    }
 
+    private String menuHeader() {
+        return "\n--- Social Network Menu " + (loggedInAs != null ? "- logged in as \033[1m" + loggedInAs.name + "\033[0m " : "") + " ---\nSelect an action:";
+    }
+
+    private String[] menuOptions() {
+        if (loggedInAs == null) {
+            return new String[]{"Exit ❌", "See feed", "List users", "Log in as user", "Add new user"};
+        } else {
+            return new String[]{"Exit ❌", "See feed", "List users", "User menu", "Log out", "Add new user"};
+        }
+    }
+
+    private Runnable[] menuActions() {
+        if (loggedInAs == null) {
+            return new Runnable[]{this::seeFeed, this::listUsers, this::logIn, this::addNewUser};
+        } else {
+            return new Runnable[]{this::seeFeed, this::listUsers, loggedInAs::menu, this::logOut, this::addNewUser};
+        }
+    }
     @Override
     public void menu() {
         System.out.println("\n╔═════════════════════════════════╗");
         System.out.println("🌐 WELCOME TO THE SOCIAL NETWORK 🌐");
         System.out.println("╚═════════════════════════════════╝");
-        menuLoop("\n--- Social Network Menu ---\nSelect an action:",
-                new String[] {"Exit ❌", "See feed", "List users", "Log in as user", "Add new user"},
-                new Runnable[] {this::seeFeed, this::listUsers, this::logIn, this::addNewUser},
-                false);
+        menuLoop(this::menuHeader, this::menuOptions, this::menuActions, false);
         System.out.println("Goodbye.");
+    }
+
+    private void logOut() {
+        loggedInAs = null;
+        System.out.println("Logged out");
+    }
+
+    public void initializeState() {
+        User johnSmith = new RegularUser("John Smith", "jsmith@forgery.hit");
+        users.add(johnSmith);
+        User peterPane = new Moderator("Peter Pane", "pain@suffering.com");
+        users.add(peterPane);
+        User yiLinTao = new AdminUser("Yi Lin Tao", "yilintao@nomeans.no");
+        users.add(yiLinTao);
+        loggedInAs = yiLinTao;
+        posts.add(new Post("Hello world!", "Everyone"));
+        loggedInAs = johnSmith;
+        posts.add(new Post("Inappropriate content", "Everyone"));
+        loggedInAs = peterPane;
+        posts.add(new Post("I am so tired of this work", "Peter's blog"));
+        loggedInAs = null;
     }
 
     private void addNewUser() {
@@ -54,7 +93,7 @@ public class SocialNetwork implements Menu {
                             User newUser = cons.newInstance(userName, userEmail);
                             System.out.println(users.add(newUser) ? "User added." : "Failed to add user.");
                         } catch (Exception e) {
-                            System.out.println("Error creating user: " + e);;
+                            System.out.println("Error creating user: " + e);
                         }
                     }, true);
             return true;
@@ -67,7 +106,7 @@ public class SocialNetwork implements Menu {
             return;
         }
         for (Post post : posts) {
-            System.out.println(post);
+            System.out.println(post + "\n");
         }
     }
 
@@ -82,6 +121,14 @@ public class SocialNetwork implements Menu {
     }
 
     private void logIn() {
-        listMenuLoop("Select user", "Cancel", "No users found.", users, User::menu, true);
+        listMenuLoop("Select user", "Cancel", "No users found.", users, user ->
+        {
+            loggedInAs = user;
+            System.out.println("Logged in as " + user.name + " (" + (
+                    user instanceof AdminUser ? User.UserRoles.ADMIN.getName() :
+                    user instanceof Moderator ? User.UserRoles.MODERATOR.getName() :
+                                                User.UserRoles.REGULAR.getName()) + ")");
+            user.menu();
+        }, true);
     }
 }

@@ -3,6 +3,7 @@ package Helpers;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class MenuHelper {
     public static int menu(String header, String[] options) {
@@ -17,11 +18,27 @@ public class MenuHelper {
     }
 
     public static void menuLoop(String header, String[] options, Runnable[] choiceCallbacks, boolean singleShot) {
+        menuLoop(() -> header, () -> options, () -> choiceCallbacks, singleShot);
+    }
+
+    public static void menuLoop(String header, String[] options, Supplier<Runnable[]> choiceCallbacks, boolean singleShot) {
+        menuLoop(() -> header, () -> options, choiceCallbacks, singleShot);
+    }
+
+    public static void menuLoop(String header, Supplier <String[]> options, Runnable[] choiceCallbacks, boolean singleShot) {
+        menuLoop(() -> header, options, () -> choiceCallbacks, singleShot);
+    }
+
+    public static void menuLoop(Supplier<String> header, String[] options, Runnable[] choiceCallbacks, boolean singleShot) {
+        menuLoop(header, () -> options, () -> choiceCallbacks, singleShot);
+    }
+
+    public static void menuLoop(Supplier<String> header, Supplier<String[]> options, Supplier<Runnable[]> choiceCallbacks, boolean singleShot) {
         int choice;
         do {
-            choice = menu(header, options);
+            choice = menu(header.get(), options.get());
             if (choice > 0) {
-                choiceCallbacks[choice-1].run();
+                choiceCallbacks.get()[choice-1].run();
             }
         } while(choice > 0 && !singleShot);
     }
