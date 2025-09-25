@@ -4,9 +4,9 @@ import Helpers.Named;
 public abstract class User implements Menu, Named {
 
     public enum UserRoles implements Named {
-        REGULAR(User.class),
+        REGULAR(RegularUser.class),
         MODERATOR(Moderator.class),
-        ADMIN(User.class);
+        ADMIN(AdminUser.class);
 
         final Class<? extends User> userClass;
 
