@@ -1,8 +1,10 @@
 import Helpers.Menu;
 import Helpers.Named;
+import Helpers.SafeInput;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import static Helpers.MenuHelper.menuLoop;
 
@@ -57,6 +59,7 @@ public class Post implements Likeable, Named, Menu, Reportable {
             actions.add(this::like);
         }
         options.add("Who liked?");
+        actions.add(this::listLikes);
         if (reports.contains(SocialNetwork.getInstance().getCurrentUser())) {
             options.add("Unreport");
             actions.add(this::unReportMessage);
@@ -67,6 +70,14 @@ public class Post implements Likeable, Named, Menu, Reportable {
         options.add("Who reported?");
         actions.add(this::listReports);
         return new MenuThings(options.toArray(new String[0]), actions.toArray(new Runnable[0]));
+    }
+
+    private void listLikes() {
+        if (likes.isEmpty()) {
+            System.out.println("Not liked by anyone.");
+        } else {
+            System.out.println("Liked by: " + String.join(", ", likes.stream().map(u -> u.name).toList()));
+        }
     }
 
     private void listReports() {
@@ -88,17 +99,20 @@ public class Post implements Likeable, Named, Menu, Reportable {
     }
 
     private void unlike() {
-        System.out.println(likes.remove(SocialNetwork.getInstance().getCurrentUser()) ? "Post liked." : "Failed to like.");
+        System.out.println(likes.remove(SocialNetwork.getInstance().getCurrentUser()) ? "Post unliked." : "Failed to unlike.");
     }
 
     @Override
     public void menu() {
-        MenuThings things = menuThings();
-        menuLoop("Select action:", things.options, things.actions, false);
+        menuLoop(() -> "Select action:", () -> menuThings().options, () -> menuThings().actions, false);
     }
 
     public void edit() {
-
+        SafeInput si = new SafeInput(new Scanner(System.in));
+        String newContent = si.nextLine("Please input new post content (empty to cancel):");
+        if (!newContent.isEmpty()) {
+            System.out.println(editPost(SocialNetwork.getInstance().getCurrentUser(), newContent) ? "Edited successfully." : "Failed to edit");
+        }
     }
 
     @Override
