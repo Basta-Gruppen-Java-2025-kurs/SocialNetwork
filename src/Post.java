@@ -29,7 +29,17 @@ public class Post implements Likeable, Named, Menu, Reportable {
 
     @Override
     public String getName() {
-        return "" + id;
+        final int excerptLength = 20;
+        StringBuilder name = new StringBuilder("\033[37m" + id + "\033[0m");
+        name.append(" : \033[1m").append(postedBy.name).append("\033[0m posted to \033[4m").append(destination);
+        name.append("\033[0m \033[34m\"");
+        if (content.length() > excerptLength) {
+            name.append(content, 0, excerptLength).append("...");
+        } else {
+            name.append(content);
+        }
+        name.append("\"\033[0m");
+        return name.toString();
     }
 
     @Override
@@ -40,13 +50,13 @@ public class Post implements Likeable, Named, Menu, Reportable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(postedBy.name).append(" posted to ").append(destination).append(":\n");
-        sb.append(content).append("\n");
+        StringBuilder sb = new StringBuilder("\033[1m");
+        sb.append(postedBy.name).append("\033[0m posted to \033[4m").append(destination).append("\033[0m:\n\033[34m");
+        sb.append(content).append("\033[0m\n");
         if (lastEditBy != null) {
-            sb.append("(Last edited by ").append(lastEditBy.name).append(")\n");
+            sb.append("\033[37m(Last edited by \033[1m").append(lastEditBy.name).append("\033[22m)\n\033[0m");
         }
-        sb.append(likes.size()).append(" likes, ").append(reports.size()).append(" reports");
+        sb.append("\033[1m\033[37m").append(likes.size()).append("\033[22m likes, \033[1m").append(reports.size()).append("\033[22m reports\033[0m");
         return sb.toString();
     }
 
