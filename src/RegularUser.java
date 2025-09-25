@@ -1,3 +1,4 @@
+import Helpers.Menu;
 import Helpers.SafeInput;
 
 import java.util.Scanner;
@@ -31,7 +32,7 @@ public class RegularUser extends User {
         };
 
         String header = "\n--- " + name + "'s Menu ---";
-        Helpers.MenuHelper.menuLoop(header, options, actions, false);
+        Menu.menuLoop(header, options, actions, false);
     }
 
 }

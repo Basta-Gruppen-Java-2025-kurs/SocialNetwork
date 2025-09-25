@@ -1,4 +1,4 @@
-import Helpers.Menu;
+import Helpers.IMenu;
 import Helpers.Named;
 import Helpers.SafeInput;
 
@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import static Helpers.MenuHelper.menuLoop;
+import static Helpers.Menu.menuLoop;
 
-public class Post implements Likeable, Named, Menu, Reportable {
+public class Post implements Likeable, Named, IMenu, Reportable {
     ArrayList<User> likes = new ArrayList<>();
     ArrayList<User> reports = new ArrayList<>();
     int id;

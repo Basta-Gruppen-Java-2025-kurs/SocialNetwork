@@ -1,3 +1,4 @@
+import Helpers.Menu;
 import Helpers.SafeInput;
 
 import java.util.Scanner;
@@ -34,7 +35,7 @@ public class AdminUser extends User {
                     postMessage(message, destination);
                 },
                 () -> {
-                    Helpers.MenuHelper.listMenuLoop(
+                    Menu.listMenuLoop(
                             "\n--- Select a post to delete \uD83D\uDDD1\uFE0F ---",
                             "Cancel ❌",
                             "No posts available",
@@ -47,7 +48,7 @@ public class AdminUser extends User {
                 }
         };
         String header = "\n--- " + name + "'s Admin Menu ---";
-        Helpers.MenuHelper.menuLoop(header, options, actions, false);
+        Menu.menuLoop(header, options, actions, false);
     }
 
 }

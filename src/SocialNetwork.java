@@ -1,4 +1,4 @@
-import Helpers.Menu;
+import Helpers.IMenu;
 import Helpers.SafeInput;
 
 import java.lang.reflect.Constructor;
@@ -7,9 +7,9 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-import static Helpers.MenuHelper.*;
+import static Helpers.Menu.*;
 
-public class SocialNetwork implements Menu {
+public class SocialNetwork implements IMenu {
     private static SocialNetwork instance;
     public final ArrayList<Post> posts = new ArrayList<>();
     public final ArrayList<User> users = new ArrayList<>();

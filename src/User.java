@@ -1,7 +1,7 @@
-import Helpers.Menu;
+import Helpers.IMenu;
 import Helpers.Named;
 
-public abstract class User implements Menu, Named {
+public abstract class User implements IMenu, Named {
 
     public enum UserRoles implements Named {
         REGULAR(RegularUser.class, "Regular user"),
