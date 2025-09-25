@@ -146,7 +146,11 @@ public class SocialNetwork implements Menu {
             default -> null;
         };
 
-        listMenuLoop("Select post:", "Back", "No posts found.", postList, Post::menu, false);
+        if (postList == null) {
+            System.out.println("No posts to handle found.");
+        } else {
+            listMenuLoop("Select post:", "Back", "No posts found.", postList, Post::menu, false);
+        }
     }
 
 }
