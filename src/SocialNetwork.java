@@ -5,6 +5,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import static Helpers.MenuHelper.*;
 
@@ -139,9 +140,10 @@ public class SocialNetwork implements Menu {
             return;
         }
         ArrayList<Post> postList = switch (loggedInAs) {
-            case RegularUser user -> posts.stream().filter(p -> p.postedBy == user).toList();
+            case RegularUser user -> posts.stream().filter(p -> p.postedBy == user).collect(Collectors.toCollection(ArrayList::new));
             case Moderator ignored -> posts;
             case AdminUser ignored -> posts;
+            default -> null;
         };
 
         listMenuLoop("Select post:", "Back", "No posts found.", postList, Post::menu, false);
